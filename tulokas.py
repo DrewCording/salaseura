@@ -26,7 +26,18 @@ async def on_ready():
     
 @client.command()
 async def tulokas(ctx, user: discord.Member):
-    #Code goes here
+    guest_role = discord.utils.get(ctx.guild.roles, name=os.getenv('guest_role'))
+    probation_role = discord.utils.get(ctx.guild.roles, name=os.getenv('probation_role'))
+    member_role = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role'))
+    announce_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('announce_channel'))
+    commands_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('commands_channel'))
+
+    print(guest_role)
+    print(probation_role)
+    print(member_role)
+    print(announce_channel)
+    print(commannds_channel)
+
 
 
 @tulokas.error
