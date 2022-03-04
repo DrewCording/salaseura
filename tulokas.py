@@ -36,14 +36,14 @@ async def tulokas(ctx, user: discord.Member):
     print(probation_role)
     print(member_role)
     print(announce_channel)
-    print(commannds_channel)
+    print(commands_channel)
 
 
 
-@tulokas.error
-async def tulokas_error(ctx, error):
-    if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Usage: !tulokas @user")
+#@tulokas.error
+#async def tulokas_error(ctx, error):
+#    if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+#        await ctx.send("Usage: !tulokas @user")
 
 
 client.run(os.getenv('TOKEN'))
