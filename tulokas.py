@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import asyncio
 import mysql.connector
+from datetime import date
 
 load_dotenv()
 intents = discord.Intents.all()
@@ -32,18 +33,23 @@ async def tulokas(ctx, user: discord.Member):
     announce_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('announce_channel'))
     commands_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('commands_channel'))
 
-    print(guest_role)
-    print(probation_role)
-    print(member_role)
-    print(announce_channel)
-    print(commands_channel)
+    if guest_role in user.roles:
+        await user.remove_roles(guest_role)
+        await user.add_roles(probation_role)
+        await ctx.send("<@!" + str(user.id) + "> put on probation on " + str(date.today()))
 
+        mycursor = mydb.cursor()
+        sql = "INSERT INTO members (user_id, discord_tag, join_date) VALUES (%s, %s, %s)"
+        val = (user.id, str(user), date.today())
+        mycursor.execute(sql, val)
+        mydb.commit()
+    else:
+        await ctx.send("Error. This command can only be used on guests.")
 
-
-#@tulokas.error
-#async def tulokas_error(ctx, error):
-#    if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-#        await ctx.send("Usage: !tulokas @user")
+@tulokas.error
+async def tulokas_error(ctx, error):
+    if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+        await ctx.send("Usage: !tulokas @user")
 
 
 client.run(os.getenv('TOKEN'))
