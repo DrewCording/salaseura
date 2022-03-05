@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import asyncio
 import mysql.connector
+from datetime import date
 
 load_dotenv()
 intents = discord.Intents.all()
@@ -26,7 +27,27 @@ async def on_ready():
     
 @client.command()
 async def jasen(ctx, user: discord.Member):
-    #Code goes here
+    guest_role = discord.utils.get(ctx.guild.roles, name=os.getenv('guest_role'))
+    probation_role = discord.utils.get(ctx.guild.roles, name=os.getenv('probation_role'))
+    member_role = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role'))
+    announce_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('announce_channel'))
+    commands_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('commands_channel'))
+    
+    if ctx.channel == commands_channel:
+
+        if probation_role in user.roles:
+            await user.remove_roles(probation_role)
+            await user.add_roles(member_role)
+            await ctx.send("<@!" + str(user.id) + "> taken off probation and given membership on " + str(date.today()))
+    
+            mycursor = mydb.cursor()
+            mycursor.execute("DELETE FROM members WHERE user_id=" + str(user.id))
+            mydb.commit()
+        else:
+            await ctx.send("Error. This command can only be used on users with " + str(probation_role) + " role.")
+
+    else:
+        await ctx.send("Error. This command can only be used in <#" + str(commands_channel.id) + ">.")
 
 
 @jasen.error
