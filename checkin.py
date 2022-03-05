@@ -6,7 +6,9 @@ from dotenv import load_dotenv
 from discord.ext import commands
 import asyncio
 import mysql.connector
-from time inport datetime
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 
 load_dotenv()
 intents = discord.Intents.all()
@@ -23,20 +25,29 @@ mycursor = mydb.cursor()
 
 @client.event
 async def on_ready():
-    print('tulokas started on bot {0.user}'.format(client))
+    print('checkin started on bot {0.user}'.format(client))
+    
+    await client.wait_until_ready()
 
+    today = date.today()
+    min_probation = today - timedelta(days=int(os.getenv('min_probation')))
+    max_probation = today - timedelta(days=int(os.getenv('max_probation')))
 
-async def checkin():
-	await client.wait_until_ready()
-    try:
-        #Code goes here
+    mycursor = mydb.cursor()
+    #mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(min_probation) + "'"))
+    mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(today) + "'"))
+    min_probation_members = mycursor.fetchall()
+    mydb.commit()
 
-        break;
+    mycursor = mydb.cursor()
+    mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(max_probation) + "'"))
+    max_probation_members = mycursor.fetchall()
+    mydb.commit()
 
-	except: 
-		print("Checkin crashed at " datetime.now())
+    for member in min_probation_members:
+        print(member)
 
+    await client.close()
 
-client.loop.create_task(checkin())
 client.run(os.getenv('TOKEN'))
 
