@@ -47,7 +47,7 @@ async def jasen(ctx, user: discord.Member):
             else:
                 await ctx.send("Error. This command can only be used on users with " + str(probation_role) + " role.")
         else:
-            await ctx.send("Error. This command can only be used by users with " + str(mod_role) + " role.")
+            await ctx.send("Error. This command can only be used by users with <@&" + str(mod_role.id) + "> role.")
     else:
         await ctx.send("Error. This command can only be used in <#" + str(commands_channel.id) + ">.")
 
