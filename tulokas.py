@@ -27,19 +27,21 @@ async def on_ready():
     
 @client.command()
 async def tulokas(ctx, user: discord.Member):
+    load_dotenv()
     guest_role = discord.utils.get(ctx.guild.roles, name=os.getenv('guest_role'))
     probation_role = discord.utils.get(ctx.guild.roles, name=os.getenv('probation_role'))
     member_role = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role'))
     mod_role = discord.utils.get(ctx.guild.roles, name=os.getenv('mod_role'))
     announce_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('announce_channel'))
     commands_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('commands_channel'))
+    today = date.today()
     
     if ctx.channel == commands_channel:
         if mod_role in ctx.author.roles:
             if guest_role in user.roles:
                 await user.remove_roles(guest_role)
                 await user.add_roles(probation_role)
-                await ctx.send("<@!" + str(user.id) + "> put on probation on " + str(date.today()))
+                await ctx.send("<@!" + str(user.id) + "> put on probation on " + str(today.strftime("%d.%m.%y")))
         
                 mycursor = mydb.cursor()
                 sql = "INSERT INTO members (user_id, discord_tag, join_date) VALUES (%s, %s, %s)"

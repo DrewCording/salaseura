@@ -17,6 +17,7 @@ async def on_ready():
     
 @client.command()
 async def env_edit(ctx, env_new):
+    load_dotenv()
     owner = discord.utils.get(ctx.guild.members, name=os.getenv('owner_name'))
 
     if ctx.author == owner:
@@ -37,10 +38,19 @@ async def env_edit(ctx, env_new):
 @env_edit.error
 async def env_edit_error(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Usage: !env_edit <text>")
-        env_file = open(".env", "r")
-        await ctx.send("Current .env text:\n" + str(env_file.read()))
-        env_file.close()
+        owner = discord.utils.get(ctx.guild.members, name=os.getenv('owner_name'))
+
+        if ctx.author == owner:
+            await ctx.send("Usage: !env_edit <text>")
+            env_file = open(".env", "r")
+            await ctx.send("Current .env text:\n" + str(env_file.read()))
+            env_file.close()
+        else:
+            if owner:
+                await ctx.send("Error. This command can only be used by <@!" + str(owner.id) + ">")
+            else:
+                await ctx.send("Error. This command can onnly be used by the owner. Owner not found. Did they change names?")
+
 
 client.run(os.getenv('TOKEN'))
 

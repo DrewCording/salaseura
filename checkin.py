@@ -28,6 +28,7 @@ async def on_ready():
     print('checkin started on bot {0.user}'.format(client))
     await client.wait_until_ready()
     
+    load_dotenv()
     guild = discord.utils.get(client.guilds, name=os.getenv('guild_name'))
     guest_role = discord.utils.get(guild.roles, name=os.getenv('guest_role'))
     probation_role = discord.utils.get(guild.roles, name=os.getenv('probation_role'))
@@ -42,25 +43,23 @@ async def on_ready():
 
     mycursor = mydb.cursor()
     mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(min_probation) + "'"))
-    #mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(today) + "'"))
     min_probation_members = mycursor.fetchall()
     mydb.commit()
 
     mycursor = mydb.cursor()
     mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(max_probation) + "'"))
-    #mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(today) + "'"))
     max_probation_members = mycursor.fetchall()
     mydb.commit()
 
     for member in min_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for 2 weeks today.")
+        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('min_probaation')) + " days today.")
 
     for member in max_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for 4 months today and has been demoted to guest.")
+        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('max_probation')) + " days today and has been demoted to guest.")
 
         user = discord.utils.get(guild.members, id=int(member_numeric))
         await user.add_roles(guest_role)
