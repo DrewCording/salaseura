@@ -31,6 +31,8 @@ async def jasen(ctx, user: discord.Member):
     guest_role = discord.utils.get(ctx.guild.roles, name=os.getenv('guest_role'))
     probation_role = discord.utils.get(ctx.guild.roles, name=os.getenv('probation_role'))
     member_role = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role'))
+    member_role2 = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role2'))
+    member_role3 = discord.utils.get(ctx.guild.roles, name=os.getenv('member_role3'))
     mod_role = discord.utils.get(ctx.guild.roles, name=os.getenv('mod_role'))
     announce_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('announce_channel'))
     commands_channel = discord.utils.get(ctx.guild.channels, name=os.getenv('commands_channel'))
@@ -41,6 +43,8 @@ async def jasen(ctx, user: discord.Member):
             if probation_role in user.roles:
                 await user.remove_roles(probation_role)
                 await user.add_roles(member_role)
+                await user.add_roles(member_role2)
+                await user.add_roles(member_role3)
                 await ctx.send("<@!" + str(user.id) + "> taken off probation and given membership on " + str(today.strftime("%d.%m.%y")))
         
                 mycursor = mydb.cursor()
