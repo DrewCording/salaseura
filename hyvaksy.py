@@ -23,10 +23,10 @@ mycursor = mydb.cursor()
 
 @client.event
 async def on_ready():
-    print('tulokas started on bot {0.user}'.format(client))
+    print('hyvaksy started on bot {0.user}'.format(client))
     
 @client.command()
-async def tulokas(ctx, user: discord.Member):
+async def hyvaksy(ctx, user: discord.Member):
     load_dotenv()
     guest_role = discord.utils.get(ctx.guild.roles, name=os.getenv('guest_role'))
     probation_role = discord.utils.get(ctx.guild.roles, name=os.getenv('probation_role'))
@@ -55,10 +55,10 @@ async def tulokas(ctx, user: discord.Member):
     else:
         await ctx.send("Error. This command can only be used in <#" + str(commands_channel.id) + ">.")
 
-@tulokas.error
-async def tulokas_error(ctx, error):
+@hyvaksy.error
+async def hyvaksy(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Usage: !tulokas @user")
+        await ctx.send("Usage: !hyvaksy @user")
 
 
 client.run(os.getenv('TOKEN'))
