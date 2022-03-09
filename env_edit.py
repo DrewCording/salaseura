@@ -30,9 +30,9 @@ async def env_edit(ctx, env_new):
         env_file.close()
     else:
         if owner:
-            await ctx.send("Error. This command can only be used by <@!" + str(owner.id) + ">")
+            await ctx.send("Virhe! Tätä komentoa voi käyttää vain <@!" + str(owner.id) + ">")
         else:
-            await ctx.send("Error. This command can onnly be used by the owner. Owner not found. Did they change names?")
+            await ctx.send("Virhe! Tätä komentoa voi käyttää vain omistaja. Häntä ei löytynyt, onko nimi vaihtunut?")
 
 
 @env_edit.error
@@ -41,15 +41,15 @@ async def env_edit_error(ctx, error):
         owner = discord.utils.get(ctx.guild.members, name=os.getenv('owner_name'))
 
         if ctx.author == owner:
-            await ctx.send("Usage: !env_edit <text>")
+            await ctx.send("Käyttö: !env_edit <teksti>")
             env_file = open(".env", "r")
-            await ctx.send("Current .env text:\n" + str(env_file.read()))
+            await ctx.send("Tämänhetkinen .env teksti:\n" + str(env_file.read()))
             env_file.close()
         else:
             if owner:
-                await ctx.send("Error. This command can only be used by <@!" + str(owner.id) + ">")
+                await ctx.send("Virhe! Tätä komentoa voi käyttää vain <@!" + str(owner.id) + ">")
             else:
-                await ctx.send("Error. This command can onnly be used by the owner. Owner not found. Did they change names?")
+                await ctx.send("Virhe! Tätä komentoa voi käyttää vain omistaja. Häntä ei löytynyt, onko nimi vaihtunut?")
 
 
 client.run(os.getenv('TOKEN'))

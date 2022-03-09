@@ -60,19 +60,18 @@ async def on_ready():
     for member in min_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('min_probation')) + " days today and is eligible for membership.")
+        await announce_channel.send("<@!" + str(member_numeric) + "> on ollut Tulokkaana " + str(os.getenv('min_probation')) + " päivää ja häntä voidaan nyt harkita jäseneksi.")
 
     for member in warn_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('warn_probation')) + " days today and is eligible for membership.")
+        await announce_channel.send("<@!" + str(member_numeric) + "> on ollut Tulokkaana " + str(os.getenv('warn_probation')) + " päivää. Onko hän sopiva jäseneksi?")
 
 
     for member in max_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('max_probation')) + " days today and has been demoted to guest.")
-
+        await announce_channel.send("<@!" + str(member_numeric) + "> on nyt ollut " + str(os.getenv('max_probation')) + " päivää Tulokkaana. Hänet on palautettu vieraaksi.")
         user = discord.utils.get(guild.members, id=int(member_numeric))
         await user.add_roles(guest_role)
         await user.remove_roles(probation_role)

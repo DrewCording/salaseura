@@ -41,7 +41,7 @@ async def hyvaksy(ctx, user: discord.Member):
             if guest_role in user.roles:
                 await user.remove_roles(guest_role)
                 await user.add_roles(probation_role)
-                await ctx.send("<@!" + str(user.id) + "> put on probation on " + str(today.strftime("%d.%m.%y")))
+                await ctx.send("<@!" + str(user.id) + "> on asetettu Tulokkaaksi " + str(today.strftime("%d.%m.%y")))
         
                 mycursor = mydb.cursor()
                 sql = "INSERT INTO members (user_id, discord_tag, join_date) VALUES (%s, %s, %s)"
@@ -49,16 +49,16 @@ async def hyvaksy(ctx, user: discord.Member):
                 mycursor.execute(sql, val)
                 mydb.commit()
             else:
-                await ctx.send("Error. This command can only be used on users with " + str(guest_role) + " role.")
+                await ctx.send("Virhe! Tätä komentoa voi käyttää vain käyttäjiin, joilla on " + str(guest_role) + " -rooli.")
         else:
-            await ctx.send("Error. This command can only be used by users with <@&" + str(mod_role.id) + "> role.")
+            await ctx.send("Virhe! Tätä komentoa voi käyttää vain käyttäjät, joilla on <@&" + str(mod_role.id) + "> -rooli.")
     else:
-        await ctx.send("Error. This command can only be used in <#" + str(commands_channel.id) + ">.")
+        await ctx.send("Virhe! Tätä komentoa voi käyttää vain kanavalla <#" + str(commands_channel.id) + ">.")
 
 @hyvaksy.error
 async def hyvaksy(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Usage: !hyvaksy @user")
+        await ctx.send("Käyttö: !hyvaksy @user")
 
 
 client.run(os.getenv('TOKEN'))
