@@ -39,11 +39,17 @@ async def on_ready():
 
     today = date.today()
     min_probation = today - timedelta(days=int(os.getenv('min_probation')))
+    warn_probation = today - timedelta(days=int(os.getenv('warn_probation')))
     max_probation = today - timedelta(days=int(os.getenv('max_probation')))
 
     mycursor = mydb.cursor()
     mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(min_probation) + "'"))
     min_probation_members = mycursor.fetchall()
+    mydb.commit()
+
+    mycursor = mydb.cursor()
+    mycursor.execute(str("SELECT user_id FROM members WHERE join_date='" + str(warn_probation) + "'"))
+    warn_probation_members = mycursor.fetchall()
     mydb.commit()
 
     mycursor = mydb.cursor()
@@ -54,7 +60,13 @@ async def on_ready():
     for member in min_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
         member_numeric = "".join(numeric_filter)
-        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('min_probaation')) + " days today.")
+        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('min_probation')) + " days today and is eligible for membership.")
+
+    for member in warn_probation_members:
+        numeric_filter = filter(str.isdigit, str(member))
+        member_numeric = "".join(numeric_filter)
+        await announce_channel.send("<@!" + str(member_numeric) + "> has been on probation for " + str(os.getenv('warn_probation')) + " days today and is eligible for membership.")
+
 
     for member in max_probation_members:
         numeric_filter = filter(str.isdigit, str(member))
