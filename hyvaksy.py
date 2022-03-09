@@ -58,7 +58,7 @@ async def hyvaksy(ctx, user: discord.Member):
 @hyvaksy.error
 async def hyvaksy(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Käyttö: !hyvaksy @user")
+        await ctx.send("Käyttö: !hyvaksy @käyttäjä")
 
 
 client.run(os.getenv('TOKEN'))

@@ -59,7 +59,7 @@ async def hylkaa(ctx, user: discord.Member):
 @hylkaa.error
 async def hylkaa_error(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Käyttö: !hylkaa @user")
+        await ctx.send("Käyttö: !hylkaa @käyttäjä")
 
 
 client.run(os.getenv('TOKEN'))

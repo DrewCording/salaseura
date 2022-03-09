@@ -61,7 +61,7 @@ async def jasen(ctx, user: discord.Member):
 @jasen.error
 async def jasen_error(ctx, error):
     if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
-        await ctx.send("Käyttö: !jasen @user")
+        await ctx.send("Käyttö: !jasen @käyttäjä")
 
 
 client.run(os.getenv('TOKEN'))
